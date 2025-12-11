@@ -1,7 +1,7 @@
 from pydantic import BaseModel, field_validator
 
 
-class RegisterUserResponse(BaseModel):
+class RegisterUserResponseModel(BaseModel):
     """
     The model for register user response.
     The response has only one field - id.
