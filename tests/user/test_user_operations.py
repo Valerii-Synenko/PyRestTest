@@ -30,6 +30,8 @@ class TestUserOperations:
 
         response = user_client.user_register(user_model=user_model)
 
-        assert response.status_code == 200
+        assert (
+            response.status_code == 200
+        ), f"the request with {user_model.model_dump()} returned status code: {response.status_code}"
 
         RegisterUserResponseModel.model_validate(response.json())
