@@ -19,7 +19,7 @@ def faker() -> Faker:
         Faker: Faker object
 
     """
-    locale: str = os.getenv("FAKER_LOCALE")
+    locale: str | None = os.getenv("FAKER_LOCALE")
 
     return Faker(locale=locale)
 
