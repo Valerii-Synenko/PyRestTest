@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASE_URL: http://localhost/
+      FAKER_LOCALE: hr_HR
       TIMEOUT: 30
 
     steps:
