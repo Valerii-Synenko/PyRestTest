@@ -39,7 +39,7 @@ class BaseClient:
         base_url = os.getenv("BASE_URL")
         if not base_url:
             raise RuntimeError(
-                f"BASE_URL is not set.\n The value of BASE_URL is '{base_url}'"
+                f"BASE_URL is not set. The value of BASE_URL is: {base_url}"
             )
 
         self.endpoint = f"{base_url}{endpoint}"
