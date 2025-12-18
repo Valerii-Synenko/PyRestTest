@@ -1,0 +1,165 @@
+name: tests_workflow.yml
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout test-framework repository
+        uses: actions/checkout@v4
+
+      - name: Checkout microservices-demo repository
+        uses: actions/checkout@v4
+        with:
+          repository: Valerii-Synenko/microservices-demo
+          path: microservices-demo
+
+      - name: Docker compose up microservices-demo
+        run: |
+          cd microservices-demo/deploy/docker-compose
+          docker compose up -d
+
+          echo "Waiting for services to start..."
+          sleep 60
+
+      - name: Verify Docker containers up and running
+        run: |
+          CONTAINER_COUNT=$(docker ps -q | wc -l)
+          if [ "$CONTAINER_COUNT" -gt 0 ]; then
+            echo "✅ $CONTAINER_COUNT containers running"
+            docker ps --format "table {{.Names}}\t{{.Status}}"
+          else
+            echo "❌ No containers running"
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Checkout gh-pages branch to get Allure reports history
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Run pytest with Allure
+        run: |
+          poetry run pytest --alluredir=allure-results -v
+        continue-on-error: true
+
+      - name: Docker compose down microservices-demo
+        if: always()
+        run: |
+          cd microservices-demo/deploy/docker-compose
+          docker compose down -v
+
+      - name: Install Allure CLI
+        if: always()
+        run: |
+          echo "📥 Installing Allure CLI..."
+          wget -q https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-2.25.0.tgz
+          tar -zxf allure-2.25.0.tgz
+          sudo mv allure-2.25.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+          allure --version
+
+      - name: Generate Allure Report (with history)
+        if: always()
+        run: |
+          ##################
+          # Restore history
+          ##################
+          if [ -d "gh-pages/history" ]; then
+            echo "✅ History found from previous runs"
+            mkdir -p allure-results/history
+            cp -r gh-pages/history/* allure-results/history/
+          else
+            echo "ℹ️ No history found (first run)"
+          fi
+
+          ##################
+          # Generate report
+          ##################
+          echo "📊 Generating Allure report..."
+          allure generate allure-results -o allure-report --clean
+
+          echo "✅ Report generated successfully"
+
+          ###########################
+          # Verify history in report
+          ###########################
+          if [ -d "allure-report/history" ]; then
+            echo "✅ History included in report"
+            ls -la allure-report/history/
+          fi
+
+      - name: Add metadata to report
+        if: always()
+        run: |
+          cat > allure-report/README.md << EOF
+          # 📊 Allure Test Report
+
+          **Generated**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Run Number**: #${{ github.run_number }}
+          **Commit**: \`${{ github.sha }}\`
+          **Branch**: \`${{ github.ref_name }}\`
+          **Triggered by**: ${{ github.actor }}
+
+          ---
+
+          [📋 View Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+          ## 📈 Navigate Report
+
+          - **Overview** - Summary of test results
+          - **Suites** - Tests organized by test suites
+          - **Graphs** - Trends and statistics
+          - **Timeline** - Test execution timeline
+          - **Behaviors** - Tests by features/stories
+          - **Packages** - Tests by package structure
+          EOF
+
+      - name: Publish report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+          keep_files: false
+          commit_message: "📊 Allure Report - Run #${{ github.run_number }} - ${{ github.sha }}"
+
+      - name: Add report link
+        if: always()
+        run: |
+          echo "## 📊 Allure Report" >> $GITHUB_STEP_SUMMARY
+          echo "https://<username>.github.io/<repo>/" >> $GITHUB_STEP_SUMMARY
