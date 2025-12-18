@@ -32,8 +32,17 @@ class BaseClient:
         Args:
             endpoint: API endpoint path (e.g., 'register', 'users', 'products').
                      Will be appended to BASE_URL from environment variables.
+
+        Raises:
+            RuntimeError: if BASE_URL is not set.
         """
-        self.endpoint = f"{os.getenv('BASE_URL')}{endpoint}"
+        base_url = os.getenv("BASE_URL")
+        if not base_url:
+            raise RuntimeError(
+                f"BASE_URL is not set.\n The value of BASE_URL is '{base_url}'"
+            )
+
+        self.endpoint = f"{base_url}{endpoint}"
         self._session: Optional[requests.Session] = None
 
     @property
