@@ -1,14 +1,14 @@
 # 📊 Allure Test Report
 
-**Generated**: 2025-12-18 20:59:20 UTC
-**Run Number**: #3
-**Commit**: `06dbaa2ffcd0253ac9725e3e93db443988127c18`
+**Generated**: 2025-12-18 21:05:56 UTC
+**Run Number**: #4
+**Commit**: `532aa231ffa0025c4da1e6862d0a6142e5462b90`
 **Branch**: `main`
 **Triggered by**: Valerii-Synenko
 
 ---
 
-[📋 View Workflow Run](https://github.com/Valerii-Synenko/PyRestTest/actions/runs/20351071181)
+[📋 View Workflow Run](https://github.com/Valerii-Synenko/PyRestTest/actions/runs/20351229828)
 
 ## 📈 Navigate Report
 
