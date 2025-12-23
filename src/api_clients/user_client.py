@@ -29,6 +29,6 @@ class UserClient(BaseClient):
         """
         response = self.session.post(
             url=self.endpoint,
-            json=user_model.model_dump(exclude_unset=True),
+            json=user_model.model_dump(exclude_none=True),
         )
         return response

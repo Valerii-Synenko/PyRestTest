@@ -1,24 +1,26 @@
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Annotated, Any, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class RegisterUserRequestsModel(BaseModel):
     """
     Representation of payload model for API request to user registration.
-    Fields use `Any` so that you can generate any malformed data needed for negative testing as well
-    as valid data for positive testing.
 
     Mandatory Fields:
       - username,
       - password,
-      - email
+      - email,
+
+    Optional Fields:
+      - firstName,
+      - lastName,
     """
 
-    username: Any
-    password: Any
-    email: Any
-    firstName: Optional[Any] = None
-    lastName: Optional[Any] = None
+    username: Annotated[str, Field(min_length=1)]
+    password: Annotated[str, Field(min_length=1)]
+    email: Annotated[str, Field(min_length=1)]
+    firstName: Annotated[str | None, Field(min_length=1)] = None
+    lastName: Annotated[str | None, Field(min_length=1)] = None
