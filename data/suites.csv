@@ -1,2 +1,2 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Thu Dec 18 22:22:00 UTC 2025","Thu Dec 18 22:22:00 UTC 2025","27","tests.user","test_user_operations","TestUserOperations","","","test_user_registration_with_valid_creds",""
+"passed","Tue Dec 23 23:50:25 UTC 2025","Tue Dec 23 23:50:25 UTC 2025","25","tests.user","test_user_operations","TestUserOperations","","","test_user_registration_with_valid_creds",""
