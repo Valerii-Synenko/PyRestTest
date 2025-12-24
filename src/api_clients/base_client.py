@@ -6,7 +6,6 @@ It handles session management and common configuration.
 """
 
 import os
-from typing import Optional
 
 import requests
 from dotenv import load_dotenv
@@ -36,14 +35,11 @@ class BaseClient:
         Raises:
             RuntimeError: if BASE_URL is not set.
         """
-        base_url = os.getenv("BASE_URL")
-        if not base_url:
-            raise RuntimeError(
-                f"BASE_URL is not set. The value of BASE_URL is: {base_url}"
-            )
+        if not (base_url := os.getenv("BASE_URL")):
+            raise RuntimeError(f"BASE_URL is unset. The actual value of BASE_URL is: {base_url}")
 
         self.endpoint = f"{base_url}{endpoint}"
-        self._session: Optional[requests.Session] = None
+        self._session: requests.Session | None = None
 
     @property
     def session(self) -> requests.Session:
