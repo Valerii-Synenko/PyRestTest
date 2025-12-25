@@ -1,1 +1,1 @@
-[{"uid":"b35bc1217f6ce87b","name":"test_user_registration_with_valid_creds","time":{"start":1766536925360,"stop":1766536925386,"duration":26},"status":"passed","severity":"normal"}]
+[{"uid":"b75ee2eeb4572fe","name":"User registration","time":{"start":1766623605738,"stop":1766623605790,"duration":52},"status":"passed","severity":"critical"},{"uid":"a8a3ac2d674776a4","name":"User registration","time":{"start":1766623605709,"stop":1766623605735,"duration":26},"status":"passed","severity":"critical"}]

@@ -1,2 +1,3 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Wed Dec 24 00:42:05 UTC 2025","Wed Dec 24 00:42:05 UTC 2025","26","tests.user","test_user_operations","TestUserOperations","","","test_user_registration_with_valid_creds",""
+"passed","Thu Dec 25 00:46:45 UTC 2025","Thu Dec 25 00:46:45 UTC 2025","52","tests.user","test_user_operations","TestUserOperations","","","User registration","Test is verifying that a user can do registration with specified fields."
+"passed","Thu Dec 25 00:46:45 UTC 2025","Thu Dec 25 00:46:45 UTC 2025","26","tests.user","test_user_operations","TestUserOperations","","","User registration","Test is verifying that a user can do registration with specified fields."
