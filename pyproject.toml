@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "pyresttest"
 version = "0.1.0"
-description = ""
-authors = ["valerie synenko <valerii.synenko@gmail.com>"]
+description = "Back End automated testing pet-project"
+authors = ["valerii synenko <valerii.synenko@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -16,7 +16,7 @@ pre-commit = "^4.5.0"
 allure-pytest = "^2.15.2"
 
 [tool.black]
-line-length = 99
+line-length = 100
 target-version = ["py310"]
 
 [build-system]
